@@ -49,6 +49,16 @@
                             var nw = helpers.networkDefs[item.name];
                             nw.cb=function(newElement){queue.push(newElement)};
                             var reqUrl = nw.url;
+                            // force url to be http or https
+                            if (typeof item.secure !== 'undefined') {
+                                var protocol;
+                                switch (item.secure) {
+                                    case true:     protocol = 'https://'; break;
+                                    case false:    protocol = 'http://';  break;
+                                    case 'detect': protocol = '//';       break;
+                                }
+                                reqUrl = reqUrl.replace(/^https?:\/\//,protocol);
+                            }
                             // replace params in request url
                             reqUrl = reqUrl.replace("|id|",encodeURIComponent(item.id));
                             reqUrl = reqUrl.replace("|areaName|",item.areaName);
